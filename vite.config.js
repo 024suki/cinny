@@ -98,6 +98,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    target: 'es2022',
     sourcemap: true,
     copyPublicDir: false,
     rollupOptions: {
