@@ -9,6 +9,8 @@ import topLevelAwait from 'vite-plugin-top-level-await';
 import { VitePWA } from 'vite-plugin-pwa';
 import buildConfig from './build.config';
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 const copyFiles = {
   targets: [
     {
@@ -60,32 +62,25 @@ export default defineConfig({
       allow: ['..'],
     },
   },
-  plugins: [
-    topLevelAwait({
-      // The export name of top-level await promise for each chunk module
-      promiseExportName: '__tla',
-      // The function to generate import names of top-level await promise in each chunk module
-      promiseImportName: (i) => `__tla_${i}`,
-    }),
-    viteStaticCopy(copyFiles),
-    vanillaExtractPlugin(),
-    wasm(),
-    react(),
-    VitePWA({
-      srcDir: 'src',
-      filename: 'sw.ts',
-      strategies: 'injectManifest',
-      injectRegister: false,
-      manifest: false,
-      injectManifest: {
-        injectionPoint: undefined,
-      },
-      devOptions: {
-        enabled: true,
-        type: 'module',
-      },
-    }),
-  ],
+  plugins: [topLevelAwait({
+    // The export name of top-level await promise for each chunk module
+    promiseExportName: '__tla',
+    // The function to generate import names of top-level await promise in each chunk module
+    promiseImportName: (i) => `__tla_${i}`,
+  }), viteStaticCopy(copyFiles), vanillaExtractPlugin(), wasm(), react(), VitePWA({
+    srcDir: 'src',
+    filename: 'sw.ts',
+    strategies: 'injectManifest',
+    injectRegister: false,
+    manifest: false,
+    injectManifest: {
+      injectionPoint: undefined,
+    },
+    devOptions: {
+      enabled: true,
+      type: 'module',
+    },
+  }), cloudflare()],
   optimizeDeps: {
     exclude: ['@matrix-org/matrix-sdk-crypto-wasm'],
     esbuildOptions: {
