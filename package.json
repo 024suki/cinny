@@ -129,5 +129,10 @@
     "vite-plugin-static-copy": "1.0.4",
     "vite-plugin-top-level-await": "1.4.4",
     "wrangler": "4.166.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@swc/core": "1.15.3"
+    }
   }
 }
